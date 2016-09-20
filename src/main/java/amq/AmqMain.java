@@ -31,6 +31,7 @@ public class AmqMain {
             for(int i = 0; i < args.length && over == false; ++i) {
                 switch (args[i]) {
                     case "-h":
+                    case "--help":
                         printUsage();
                         System.exit(0);
                         break;
