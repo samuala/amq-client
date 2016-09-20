@@ -30,11 +30,8 @@ public class Publisher implements Runnable{
 
     public void send(ParamBean param) throws Exception {
         System.out.println("begin to send......" + param.toString());
-        String body = "";
+        String body = param.getData();
         int size = param.getMsgSize();
-
-       //1000000020103639
-
 
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(param.getMqServerLoc());
         Connection connection = connectionFactory.createConnection();
@@ -77,30 +74,8 @@ public class Publisher implements Runnable{
         + ". TPS " + String.valueOf(param.getMsgNumer() * 1000 / (System.currentTimeMillis() - start)));
 
         //producer.send(session.createTextMessage("SHUTDOWN"));
-        /*session.close();
-        connection.close();*/
-    }
-
-    public static void main(String []args) throws Exception {
-
-  /*      // Create a ConnectionFactory，创建连接工厂
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://172.30.11.240:61616");
-
-// Create a Connection，创建连接
-        Connection connection = connectionFactory.createConnection();
-        connection.start();//打开连接
-
-// Create a Session//创建会话
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);//指定ACK_Mode签收确认模式为自动确认
-
-// Create the destination (Topic or Queue)
-        Destination destination = session.createQueue("TEST.FOO");//创建消息目标(点对点模型队列)
-//Destination destination = session.createTopic("TEST.FOO");//创建消息目标(订阅主题)
-// Create a MessageProducer from the Session to the Topic or Queue,创建消息生产者
-        MessageProducer producer = session.createProducer(destination);//创建消息生产者
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);//指定传输模式-非持久性消息*/
-
-
+        session.close();
+        connection.close();
     }
 
     private static String env(String key, String defaultValue) {

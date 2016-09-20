@@ -16,10 +16,11 @@ public class ParamBean {
     private int logPointNum;
     private int samplesNum;
     private int multiThreadNum;
+    private String data;
 
     public ParamBean() {
         //failover:tcp://host1:port1,tcp://host2:port2
-        mqServerLoc = "failover:(tcp://10.10.8.50:61616)?initialReconnectDelay=1000";
+        mqServerLoc = "failover:tcp://172.30.11.240:61616,tcp://172.30.11.77:61616,tcp://172.30.0.21:61616";
                 //"failover:(tcp://172.16.5.241:61656,tcp://172.16.5.241:61666,tcp://172.16.5.242:61656,tcp://172.16.5.242:61666)?initialReconnectDelay=1000";
                 //"failover:tcp://172.30.11.240:61616,tcp://172.30.11.77:61616,tcp://172.30.0.21:61616";
                 // "failover:(tcp://10.10.8.50:61616)?initialReconnectDelay=1000";
@@ -36,6 +37,15 @@ public class ParamBean {
         persistence = false;
         logPointNum = 10000;
         multiThreadNum = 1;
+        data = "";
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public int getMultiThreadNum() {
@@ -122,6 +132,7 @@ public class ParamBean {
                 ", logPointNum=" + logPointNum +
                 ", samplesNum=" + samplesNum +
                 ", multiThreadNum=" + multiThreadNum +
+                ", data='" + data + '\'' +
                 '}';
     }
 

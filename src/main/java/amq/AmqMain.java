@@ -9,67 +9,86 @@ import java.util.concurrent.ExecutorService;
 /**
  * Created by sammy on 2015/11/10.
  */
-public class AmqTest1 {
-
-    public static void testF(ParamBean b) {
-        //b= new ParamBean();
-        b.setMsgNumer(3);
-    }
+public class AmqMain {
     /**
      * persist 1:yes 0:no
      *
      * @param args
      */
-    //TODO support multi-thread
     public static void main(String[] args) throws Exception {
-        /*ParamBean pb = new ParamBean();
-        testF(pb);
-        System.exit(1);*/
-
-        if(args.length % 2 != 0) {
+        /*if(args.length % 2 != 0) {
             if(args.length > 0 && args[0].equals("-h") == false)
                 System.out.println("wrong params");
             printUsage();
             System.exit(0);
-        }
+        }*/
 
         System.out.println(Arrays.toString(args));
 
         ParamBean para = new ParamBean();
-        for(int i = 0; i < args.length; ++i) {
-            switch (args[i]) {
-                case "-h":
-                    printUsage();
-                    System.exit(0);
-                    break;
-                case "-m":
-                    para.setMode(Integer.valueOf(args[i+1]));
-                    break;
-                case "-p":
-                    para.setPersistence(args[i+1].equals("1") ? true : false);
-                    break;
-                case "-s":
-                    para.setMqServerLoc(args[i+1]);
-                    break;
-                case "-l":
-                    para.setMsgSize(Integer.valueOf(args[i+1]));
-                    break;
-                case "-q":
-                    para.setQueueName(args[i+1]);
-                    break;
-                case "-n":
-                    para.setMsgNumer(Integer.valueOf(args[i+1]));
-                    break;
-                case "-t":
-                    para.setMultiThreadNum(Integer.valueOf(args[i+1]));
-                    break;
-                default:
-                    System.out.println("unknown param");
-                    printUsage();
-                    System.exit(0);
+        boolean over = false;
+        try {
+            for(int i = 0; i < args.length && over == false; ++i) {
+                switch (args[i]) {
+                    case "-h":
+                        printUsage();
+                        System.exit(0);
+                        break;
+                    case "-m":
+                        para.setMode(Integer.valueOf(args[i+1]));
+                        i++;
+                        break;
+                    case "-p":
+                        para.setPersistence(args[i+1].equals("1") ? true : false);
+                        i++;
+                        break;
+                    case "-s":
+                        para.setMqServerLoc(args[i+1]);
+                        i++;
+                        break;
+                    case "-l":
+                        para.setMsgSize(Integer.valueOf(args[i+1]));
+                        i++;
+                        break;
+                    case "-q":
+                        para.setQueueName(args[i+1]);
+                        i++;
+                        break;
+                    case "-n":
+                        para.setMsgNumer(Integer.valueOf(args[i+1]));
+                        i++;
+                        break;
+                    case "-t":
+                        para.setMultiThreadNum(Integer.valueOf(args[i+1]));
+                        i++;
+                        break;
+                    case "-d":
+                        StringBuffer stringBuffer = new StringBuffer(args[i+1]);
+                        for(int j = i+2; j<args.length; ++ j) {
+                            stringBuffer.append(" ").append(args[j]);
+                        }
+                        para.setData(stringBuffer.toString());
+                        over = true;
+                        break;
+                    case "--fsend":
+                        para.setMode(1);
+                        para.setPersistence(true);
+                        para.setMsgNumer(1);
+                        para.setMultiThreadNum(1);
+                        break;
+                    default:
+                        System.out.println("unknown param");
+                        printUsage();
+                        System.exit(0);
+                }
+
             }
-            i++;
+        } catch (Exception e) {
+            System.out.println("wrong input while handling it, please check again");
+            System.out.println(e.getMessage());
+            System.exit(0);
         }
+
 
         if(para.getMode() == 1) {
             if(para.getMultiThreadNum() == 1) {
@@ -113,9 +132,12 @@ public class AmqTest1 {
         System.out.println("-q\tmq queue name, default is Test.Sam.Foo");
         System.out.println("-n\tmq msg number you want to send or receive, default is 100000");
         System.out.println("-t\tmulti thread running mode. default thread number is 1. MAX is 16. Note: if you set msg num to 1000, then every thread will send 1000 msgs");
+        System.out.println("-d\tdata you want to send. Put this arg to last parameter to support whitespace data");
+        System.out.println("--fsend\tused to fast send a msg to a certain queue on server");
         System.out.println("");
         System.out.println("example:");
         System.out.println("java -jar jarname -m 1 -p 1 -n 1000000");
+        System.out.println("java -jar jarname --fsend -s __yourServerAddr__ -q __yourQueueName__ -d __data__");
         System.out.println("");
         System.out.println("enjoy it - Sammy");
     }
