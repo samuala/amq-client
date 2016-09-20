@@ -1,3 +1,5 @@
+https://travis-ci.org/sammylp/amq-client.svg?branch=master
+
 # amq-client
 Used for fast activeMQ msg sender and receiver, and activeMQ benchmark
 
