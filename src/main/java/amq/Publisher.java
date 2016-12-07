@@ -19,6 +19,10 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import pojo.ParamBean;
 
 import javax.jms.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Scanner;
 
 public class Publisher implements Runnable{
 
@@ -54,21 +58,43 @@ public class Publisher implements Runnable{
         long now = pre;
         long start = pre;
         long index = 1;
-        for( int i=1; i <= param.getMsgNumer(); i ++) {
-            TextMessage msg = session.createTextMessage(body);
-            msg.setIntProperty("id", i);
-            producer.send(msg);
-            //Thread.sleep(80);
-            if( (i % 10000) == 0) {
-                now = System.currentTimeMillis();
-                long interval = now - pre;
-                pre = now;
 
-                double rate = 10000 * 1000 / interval;
-                System.out.println(String.format("Sent No.%s-%s message. Rate is %s tps, internal %s ms", index, i, rate, interval));
-                index = i;
+
+        //get file
+        File file = new File("C:\\Users\\pengl\\Documents\\Tencent Files\\2406587980\\FileRecv\\1.txt");
+        Scanner scanner = new Scanner(new FileInputStream(file));
+        int k = 1;
+        while(scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            System.out.println((k++) + ":" + line);
+            TextMessage msg = session.createTextMessage(line);
+
+            //msg.setIntProperty("id", k);
+            producer.send(msg);
+            if(k%1000 == 0) {
+                Thread.sleep(2000);
             }
         }
+
+
+
+
+
+//        for( int i=1; i <= param.getMsgNumer(); i ++) {
+//            TextMessage msg = session.createTextMessage(body);
+//            msg.setIntProperty("id", i);
+//            producer.send(msg);
+//            //Thread.sleep(80);
+//            if( (i % 10000) == 0) {
+//                now = System.currentTimeMillis();
+//                long interval = now - pre;
+//                pre = now;
+//
+//                double rate = 10000 * 1000 / interval;
+//                System.out.println(String.format("Sent No.%s-%s message. Rate is %s tps, internal %s ms", index, i, rate, interval));
+//                index = i;
+//            }
+//        }
 
         System.out.println(Thread.currentThread().getId() + " thread, Total sent " + param.getMsgNumer() + ". Total time cost " + String.valueOf((System.currentTimeMillis() - start) / 1000) + "s"
         + ". TPS " + String.valueOf(param.getMsgNumer() * 1000 / (System.currentTimeMillis() - start)));
