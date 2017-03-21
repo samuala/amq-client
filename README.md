@@ -3,7 +3,7 @@
 # amq-client
 Used for fast activeMQ msg sender and receiver, and activeMQ benchmark
 
-#How to use it
+# How to use it
 Compile code to runnable jar or just use the generated jar directly.
 
 0. You want help:
