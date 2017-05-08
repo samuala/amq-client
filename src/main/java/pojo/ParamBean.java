@@ -20,7 +20,8 @@ public class ParamBean {
 
     public ParamBean() {
         //failover:tcp://host1:port1,tcp://host2:port2
-        mqServerLoc ="failover:(tcp://172.16.5.241:61616,tcp://172.16.5.241:61617,tcp://172.16.5.242:61616,tcp://172.16.5.242:61617)?initialReconnectDelay=1000";
+        mqServerLoc = "failover:tcp://172.30.11.240:61616,tcp://172.30.11.77:61616,tcp://172.30.0.21:61616";
+                //"failover:(tcp://172.16.5.241:61616,tcp://172.16.5.241:61617,tcp://172.16.5.242:61616,tcp://172.16.5.242:61617)?initialReconnectDelay=1000";
                 //"failover:tcp://172.30.11.240:61616,tcp://172.30.11.77:61616,tcp://172.30.0.21:61616";
 
         //"failover:(tcp://172.16.5.241:61616,tcp://172.16.5.241:61617,tcp://172.16.5.242:61616,tcp://172.16.5.242:61617)?initialReconnectDelay=1000";

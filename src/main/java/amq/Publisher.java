@@ -19,7 +19,6 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import pojo.ParamBean;
 
 import javax.jms.*;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Scanner;
@@ -61,7 +60,7 @@ public class Publisher implements Runnable{
 
 
         //get file
-        File file = new File("C:\\Users\\pengl\\Documents\\Tencent Files\\2406587980\\FileRecv\\1.txt");
+        File file = new File("F:\\fun\\qq\\2406587980\\FileRecv\\0317msgfail.txt");
         Scanner scanner = new Scanner(new FileInputStream(file));
         int k = 1;
         while(scanner.hasNextLine()) {

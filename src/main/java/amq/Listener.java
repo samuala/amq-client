@@ -19,7 +19,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import pojo.ParamBean;
 
 import javax.jms.*;
-import java.io.File;
+import java.io.*;
+import java.util.Date;
 
 public class Listener implements Runnable{
 
@@ -56,10 +57,13 @@ public class Listener implements Runnable{
         long now = System.currentTimeMillis();
         long myCount = 0;
         System.out.println("Waiting for messages...");
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter("djklwadj.txt"));
+
         while (true) {
             {
                 Message msg = consumer.receive();
-                System.out.println(Thread.currentThread().getId() + "*****************");
+                //System.out.println(Thread.currentThread().getId() + "*****************");
                 myCount++;
                 if (msg instanceof TextMessage) {
                     String body = ((TextMessage) msg).getText();
@@ -80,6 +84,15 @@ public class Listener implements Runnable{
                     }
 
                     count ++;*/
+                        System.out.println(body);
+                        if(myCount < 10) {
+                            bw.write(body);
+                            bw.newLine();
+                        }
+                        else {
+                            bw.close();
+                        }
+                        Thread.sleep(1000);
                     }
 
                     msg.acknowledge();
@@ -88,12 +101,13 @@ public class Listener implements Runnable{
                     System.out.println("Unexpected message type: " + msg.getClass());
                 }
 
-                if (myCount % 10 == 0) {
+                if (myCount % 100 == 0) {
+                    Thread.sleep(2000);
                     now = System.currentTimeMillis();
                     double rate = 10000 * 1000 / 1;
                     double time = (now - start) / 1000;
-                    System.out.println(String.format("Received %d messages. Rate %s tps, time cost %s ms, " +
-                            "accumulated time is %s, accumulated rate is %s tps", myCount, rate, now - pre, time, myCount / time));
+                    System.out.println(String.format("%s - Received %d messages. Rate %s tps, time cost %s ms, " +
+                            "accumulated time is %s, accumulated rate is %s tps", new Date(), myCount, rate, now - pre, time, myCount / time));
                     pre = now;
                 }
             }
@@ -104,8 +118,25 @@ public class Listener implements Runnable{
 
 
     public static void main(String []args) throws Exception {
-        File a = new File("D:\\tmp\\group_avg_performance_allcompany_201602.csv");
-        System.out.println(a.getPath());
+        DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream("F:\\tmp\\mq\\bak_\\0000000100405818.log")));
+        int c = 0;
+        int count = 0;
+        while((c = dataInputStream.read()) != -1) {
+            if(count > 104605498) {
+                System.out.println(count);
+            }
+            count++;
+            if(count < 144604498) {
+                continue;
+            }
+            else {
+                if(count > 144605498)
+                    return;
+                System.out.print((char) c);
+            }
+            count++;
+        }
+        dataInputStream.close();
     }
 
     private static String env(String key, String defaultValue) {
